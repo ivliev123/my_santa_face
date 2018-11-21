@@ -45,7 +45,8 @@ DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 pygame.display.set_caption('Trig Bounce')
 
 step = 0
-
+step2 = 0
+step3 = 0
 
 
 
@@ -122,8 +123,26 @@ while True:
     pygame.draw.ellipse(DISPLAYSURF, rotcolor, (WIN_CENTERX+240-80, WIN_CENTERY+50 ,80,60))
 
 
-    brow_up=np.array( [ [WIN_CENTERX+70, WIN_CENTERY-130], [WIN_CENTERX+100, WIN_CENTERY-170], [WIN_CENTERX+230, WIN_CENTERY-135], [WIN_CENTERX+235, WIN_CENTERY-105] ] )
-    brow_down=np.array( [ [WIN_CENTERX+70, WIN_CENTERY-130], [WIN_CENTERX+100, WIN_CENTERY-140], [WIN_CENTERX+235, WIN_CENTERY-105],  ] )
+    #veko
+    veko = np.array( [ [WIN_CENTERX+30, WIN_CENTERY+10], [WIN_CENTERX+70, WIN_CENTERY-80+step3*5/4], [WIN_CENTERX+150, WIN_CENTERY-80+step3*3/3], [WIN_CENTERX+200, WIN_CENTERY+10] ] )
+    x = veko[:,0]
+    y = veko[:,1]
+    
+    tck,u = interpolate.splprep( [x,y], k = 2)
+    xnew,ynew = interpolate.splev( np.linspace( 0, 1, 20 ), tck,der = 0)
+
+    xy_veko=[]
+    for i in range(len(xnew)):
+        xy_veko.append([int(xnew[i]),int(ynew[i])])
+
+    xy_veko.append([WIN_CENTERX+200,WIN_CENTERY-100])
+    xy_veko.append([WIN_CENTERX+30,WIN_CENTERY-100])
+    pygame.draw.polygon(DISPLAYSURF, f, xy_veko)
+
+
+
+    brow_up=np.array( [ [WIN_CENTERX+70, WIN_CENTERY-130+step2], [WIN_CENTERX+100, WIN_CENTERY-170+step2/2], [WIN_CENTERX+230, WIN_CENTERY-135], [WIN_CENTERX+235, WIN_CENTERY-105] ] )
+    brow_down=np.array( [ [WIN_CENTERX+70, WIN_CENTERY-130+step2], [WIN_CENTERX+100, WIN_CENTERY-140+step2/2], [WIN_CENTERX+235, WIN_CENTERY-105],  ] )
 
     x = brow_up[:,0]
     y = brow_up[:,1]
@@ -147,8 +166,8 @@ while True:
     pygame.draw.polygon(DISPLAYSURF, WHITE2, xy_brow_up)
 
 
-    brow_up=np.array( [ [WIN_CENTERX-70, WIN_CENTERY-130], [WIN_CENTERX-100, WIN_CENTERY-170], [WIN_CENTERX-230, WIN_CENTERY-135], [WIN_CENTERX-235, WIN_CENTERY-105] ] )
-    brow_down=np.array( [ [WIN_CENTERX-70, WIN_CENTERY-130], [WIN_CENTERX-100, WIN_CENTERY-140], [WIN_CENTERX-235, WIN_CENTERY-105],  ] )
+    brow_up=np.array( [ [WIN_CENTERX-70, WIN_CENTERY-130+step2], [WIN_CENTERX-100, WIN_CENTERY-170+step2/2], [WIN_CENTERX-230, WIN_CENTERY-135], [WIN_CENTERX-235, WIN_CENTERY-105] ] )
+    brow_down=np.array( [ [WIN_CENTERX-70, WIN_CENTERY-130+step2], [WIN_CENTERX-100, WIN_CENTERY-140+step2/2], [WIN_CENTERX-235, WIN_CENTERY-105],  ] )
 
     x = brow_up[:,0]
     y = brow_up[:,1]
@@ -191,6 +210,7 @@ while True:
 
 
     pygame.display.update()
+    #print np.array(pygame.display)
     FPSCLOCK.tick(FPS)
 
     if (step==40):
@@ -202,4 +222,25 @@ while True:
 
     if(step>0 and flag==1):
         step -= 1
+
+    if (step2==20):
+        flag2=1
+    if (step2==0):
+        flag2=0
+    if(step2<20 and flag2==0):
+        step2 += 1
+
+    if(step2>0 and flag2==1):
+        step2 -= 1
+
+
+    if (step3==60):
+        flag3=1
+    if (step3==0):
+        flag3=0
+    if(step3<60 and flag3==0):
+        step3 += 1
+
+    if(step3>0 and flag3==1):
+        step3 -= 1
     #step %= 2 * math.pi
